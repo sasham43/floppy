@@ -14,5 +14,5 @@ var track = '/media/pi/0/' + tracks[0];
 
 player.play(track, function startedLocalFile() {
     // The file has started playing
-    console.log('playing');
+    console.log('playing', track);
 });
