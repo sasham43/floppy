@@ -3,6 +3,7 @@ var Cvlc   = require('cvlc'),
     fs     = require('fs');
 
 var express = require('express');
+var bodyParser = require('body-parser');
 
 var app = express();
 
@@ -16,9 +17,9 @@ app.use(bodyParser.json({
 
 var listenPort = process.env.PORT || 3000;
 
-player.cmd('longhelp', function gotCommands(err, response) {
-    console.log('Available commands: ' + response);
-});
+// player.cmd('longhelp', function gotCommands(err, response) {
+//     console.log('Available commands: ' + response);
+// });
 
 var tracks = fs.readdirSync('/media/pi/0');
 
