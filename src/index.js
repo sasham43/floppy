@@ -49,8 +49,8 @@ app.get('/pause', function(req, res, next){
 });
 
 app.get('/play', function(req, res, next){
-    player.cmd('play', function(play){
-        console.log('playing', play);
+    player.play(track, function(){
+        console.log('playing');
         res.send('playing')
     });
 });
