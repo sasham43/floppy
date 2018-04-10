@@ -31,10 +31,10 @@ tracks.forEach(function(t){
     }
 });
 
-player.play(track, function startedLocalFile() {
-    // The file has started playing
-    console.log('playing', track);
-});
+// player.play(track, function startedLocalFile() {
+//     // The file has started playing
+//     console.log('playing', track);
+// });
 
 app.use(function(err, req, res, next){
   console.log('error:', err);
@@ -48,21 +48,21 @@ app.get('/pause', function(req, res, next){
     });
 });
 
-app.get('/play', function(){
+app.get('/play', function(req, res, next){
     player.cmd('play', function(play){
         console.log('playing', play);
         res.send('playing')
     });
 });
 
-app.get('/fwd', function(){
+app.get('/fwd', function(req, res, next){
     player.cmd('seek +15s', function(fwd){
         console.log('fwd', fwd);
         res.send('fwd')
     });
 });
 
-app.get('/rew', function(){
+app.get('/rew', function(req, res, next){
     player.cmd('seek -15s', function(rew){
         console.log('rew', rew);
         res.send('rew')
