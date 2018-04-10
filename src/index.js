@@ -4,6 +4,7 @@ var Cvlc   = require('cvlc'),
 
 var express = require('express');
 var bodyParser = require('body-parser');
+var gpio = require('rpi-gpio');
 
 var app = express();
 
@@ -17,13 +18,8 @@ app.use(bodyParser.json({
 
 var listenPort = process.env.PORT || 3000;
 
-// player.cmd('longhelp', function gotCommands(err, response) {
-//     console.log('Available commands: ' + response);
-// });
-
+// read track
 var tracks = fs.readdirSync('/media/pi/0');
-
-// var track = '/media/pi/0/' + tracks[0];
 var track;
 tracks.forEach(function(t){
     if(t.includes('.opus')){
@@ -31,16 +27,26 @@ tracks.forEach(function(t){
     }
 });
 
-// player.play(track, function startedLocalFile() {
-//     // The file has started playing
-//     console.log('playing', track);
-// });
-
 app.use(function(err, req, res, next){
   console.log('error:', err);
   res.status(err.statusCode || 500).json(err);
 });
 
+// gpio
+gpio.setup(14, gpio.DIR_IN, readInput);
+gpio.setup(15, gpio.DIR_IN, readInput);
+
+function readInput() {
+    gpio.read(14, function(err, value) {
+        console.log('The value 14 is ' + value);
+    });
+    gpio.read(15, function(err, value) {
+        console.log('The value 15 is ' + value);
+    });
+}
+
+
+// web commands
 app.get('/pause', function(req, res, next){
     player.cmd('pause', function(paused){
         console.log('paused', paused);
