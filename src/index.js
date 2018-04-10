@@ -4,7 +4,7 @@ var Cvlc   = require('cvlc'),
 
 var express = require('express');
 var bodyParser = require('body-parser');
-var gpio = require('rpi-gpio');
+var rpio = require('rpio');
 
 var app = express();
 
@@ -33,22 +33,20 @@ app.use(function(err, req, res, next){
 });
 
 // gpio
-// gpio.setup(14, gpio.DIR_IN, readInput);
-// gpio.setup(15, gpio.DIR_IN, readInput);
-//
-// function readInput() {
-//     gpio.read(14, function(err, value) {
-//         console.log('The value 14 is ' + value);
-//     });
-//     gpio.read(15, function(err, value) {
-//         console.log('The value 15 is ' + value);
-//     });
-// }
-gpio.on('change', function(channel, value) {
-    console.log('Channel ' + channel + ' value is now ' + value);
-});
-gpio.setup(14, gpio.DIR_IN, gpio.EDGE_BOTH);
-gpio.setup(15, gpio.DIR_IN, gpio.EDGE_BOTH);
+rpio.open(10, rpio.INPUT, rpio.PULL_DOWN);
+
+function pollcb(pin)
+{
+        /*
+         * Interrupts aren't supported by the underlying hardware, so events
+         * may be missed during the 1ms poll window.  The best we can do is to
+         * print the current state after a event is detected.
+         */
+        var state = rpio.read(pin) ? 'pressed' : 'released';
+        console.log('Button event on P%d (button currently %s)', pin, state);
+}
+
+rpio.poll(10, pollcb);
 
 
 // web commands
