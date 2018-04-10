@@ -14,7 +14,7 @@ var tracks = fs.readdirSync('/media/pi/0');
 var track;
 tracks.forEach(function(t){
     if(t.includes('.opus')){
-        track = t;
+        track = '/media/pi/0/' + t;
     }
 });
 
