@@ -34,7 +34,9 @@ app.use(function(err, req, res, next){
 
 // gpio
 rpio.open(16, rpio.INPUT, rpio.PULL_DOWN);
-rpio.open(18, rpio.INPUT, rpio.PULL_DOWN);
+// rpio.open(18, rpio.INPUT, rpio.PULL_DOWN);
+
+var playing = false;
 
 function pollcb(pin)
 {
@@ -46,19 +48,29 @@ function pollcb(pin)
         var state = rpio.read(pin) ? 'pressed' : 'released';
         console.log('Button event on P%d (button currently %s)', pin, state);
 
-        if(pin == 18){
-            player.cmd('pause', function(paused){
-                console.log('paused', paused);
-            });
-        } else if (pin == 16){
+        // if(pin == 18){
+        //     player.cmd('pause', function(paused){
+        //         console.log('paused', paused);
+        //     });
+        // } else if (pin == 16){
+        //     player.play(track, function(){
+        //         console.log('playing');
+        //     });
+        // }
+        if (playing) {
+                player.cmd('pause', function(paused){
+                    console.log('paused', paused);
+                });
+        } else {
             player.play(track, function(){
                 console.log('playing');
             });
         }
+        playing = !playing;
 }
 
 rpio.poll(16, pollcb);
-rpio.poll(18, pollcb);
+// rpio.poll(18, pollcb);
 
 
 // web commands
