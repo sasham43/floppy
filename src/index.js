@@ -42,6 +42,7 @@ button.watch(function (err, value) {
     throw err;
   }
 
+  console.log('press1');
   // led.writeSync(value);
   if(playing){
       player.play(track, function(){
@@ -63,6 +64,7 @@ button2.watch(function (err, value) {
     throw err;
   }
 
+  console.log('press2');
   // led.writeSync(value);
   if(playing){
       player.play(track, function(){
