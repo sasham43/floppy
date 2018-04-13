@@ -4,7 +4,6 @@ var Cvlc   = require('cvlc'),
 
 var express = require('express');
 var bodyParser = require('body-parser');
-var rpio = require('rpio');
 
 var app = express();
 
@@ -19,61 +18,49 @@ app.use(bodyParser.json({
 var listenPort = process.env.PORT || 3000;
 
 // read track
-var tracks = fs.readdirSync('/media/pi/0');
+var device = '/media/pi/0';
+var tracks = fs.readdirSync(device);
 var track;
+var track_name;
 tracks.forEach(function(t){
     if(t.includes('.opus')){
-        track = '/media/pi/0/' + t;
+        track_name = t;
+        track = device + t;
     }
 });
 
+// check for new media poller
+var poller = setInterval(function(){
+    fs.readdir(device, function(err, tracks){
+        tracks.forEach(function(t){
+            if(t != track_name){
+                doAPlay();
+            }
+        });
+    });
+}, 5000);
+
+function doAPlay(){
+    player.play(track, function(){
+        console.log('playing');
+        // res.send('playing')
+    });
+}
+
+player.cmd('longhelp', function(err, resp){
+    console.log('available commands', resp);
+});
+
+process.on('SIGINT', function(){
+    player.destroy();
+});
+
+// web commands
 app.use(function(err, req, res, next){
   console.log('error:', err);
   res.status(err.statusCode || 500).json(err);
 });
 
-// gpio
-rpio.open(16, rpio.INPUT, rpio.PULL_DOWN);
-// rpio.open(18, rpio.INPUT, rpio.PULL_DOWN);
-
-var playing = false;
-
-function pollcb(pin)
-{
-        /*
-         * Interrupts aren't supported by the underlying hardware, so events
-         * may be missed during the 1ms poll window.  The best we can do is to
-         * print the current state after a event is detected.
-         */
-        var state = rpio.read(pin) ? 'pressed' : 'released';
-        console.log('Button event on P%d (button currently %s)', pin, state);
-
-        // if(pin == 18){
-        //     player.cmd('pause', function(paused){
-        //         console.log('paused', paused);
-        //     });
-        // } else if (pin == 16){
-        //     player.play(track, function(){
-        //         console.log('playing');
-        //     });
-        // }
-        if (playing) {
-                player.cmd('pause', function(paused){
-                    console.log('paused', paused);
-                });
-        } else {
-            player.play(track, function(){
-                console.log('playing');
-            });
-        }
-        playing = !playing;
-}
-
-rpio.poll(16, pollcb);
-// rpio.poll(18, pollcb);
-
-
-// web commands
 app.get('/pause', function(req, res, next){
     player.cmd('pause', function(paused){
         console.log('paused', paused);
