@@ -4,7 +4,9 @@ var Cvlc   = require('cvlc'),
 
 var express = require('express');
 var bodyParser = require('body-parser');
-var rpio = require('rpio');
+// var rpio = require('rpio');
+const Gpio = require('onoff').Gpio;
+const button = new Gpio(16, 'in', 'rising');
 
 var app = express();
 
@@ -33,44 +35,32 @@ app.use(function(err, req, res, next){
 });
 
 // gpio
-rpio.open(16, rpio.INPUT, rpio.PULL_DOWN);
-// rpio.open(18, rpio.INPUT, rpio.PULL_DOWN);
-
 var playing = false;
+button.watch(function (err, value) {
+  if (err) {
+    throw err;
+  }
 
-function pollcb(pin)
-{
-        /*
-         * Interrupts aren't supported by the underlying hardware, so events
-         * may be missed during the 1ms poll window.  The best we can do is to
-         * print the current state after a event is detected.
-         */
-        var state = rpio.read(pin) ? 'pressed' : 'released';
-        console.log('Button event on P%d (button currently %s)', pin, state);
+  // led.writeSync(value);
+  if(playing){
+      player.play(track, function(){
+          console.log('playing');
+          // res.send('playing')
+          playing = false;
+      });
+  } else {
+      player.play(track, function(){
+          console.log('playing');
+          // res.send('playing')
+          playing = true;
+      });
+  }
 
-        // if(pin == 18){
-        //     player.cmd('pause', function(paused){
-        //         console.log('paused', paused);
-        //     });
-        // } else if (pin == 16){
-        //     player.play(track, function(){
-        //         console.log('playing');
-        //     });
-        // }
-        if (playing) {
-                player.cmd('pause', function(paused){
-                    console.log('paused', paused);
-                });
-        } else {
-            player.play(track, function(){
-                console.log('playing');
-            });
-        }
-        playing = !playing;
-}
+});
 
-rpio.poll(16, pollcb);
-// rpio.poll(18, pollcb);
+process.on('SIGINT', function () {
+  button.unexport();
+});
 
 
 // web commands
