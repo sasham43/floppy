@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 // var rpio = require('rpio');
 const Gpio = require('onoff').Gpio;
 const button = new Gpio(4, 'in', 'rising');
+const button2 = new Gpio(5, 'in', 'rising');
 
 var app = express();
 
@@ -37,6 +38,27 @@ app.use(function(err, req, res, next){
 // gpio
 var playing = false;
 button.watch(function (err, value) {
+  if (err) {
+    throw err;
+  }
+
+  // led.writeSync(value);
+  if(playing){
+      player.play(track, function(){
+          console.log('playing');
+          // res.send('playing')
+          playing = false;
+      });
+  } else {
+      player.play(track, function(){
+          console.log('playing');
+          // res.send('playing')
+          playing = true;
+      });
+  }
+
+});
+button2.watch(function (err, value) {
   if (err) {
     throw err;
   }
