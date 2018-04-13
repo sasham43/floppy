@@ -6,7 +6,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 // var rpio = require('rpio');
 const Gpio = require('onoff').Gpio;
-const button = new Gpio(4, 'in', 'both');
+const button = new Gpio(11, 'in', 'both');
 // const button2 = new Gpio(5, 'in', 'rising');
 
 var app = express();
