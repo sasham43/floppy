@@ -6,8 +6,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 // var rpio = require('rpio');
 const Gpio = require('onoff').Gpio;
-const button = new Gpio(4, 'in', 'rising');
-const button2 = new Gpio(5, 'in', 'rising');
+const button = new Gpio(4, 'in', 'both');
+// const button2 = new Gpio(5, 'in', 'rising');
 
 var app = express();
 
@@ -59,28 +59,28 @@ button.watch(function (err, value) {
   }
 
 });
-button2.watch(function (err, value) {
-  if (err) {
-    throw err;
-  }
-
-  console.log('press2');
-  // led.writeSync(value);
-  if(playing){
-      player.play(track, function(){
-          console.log('playing');
-          // res.send('playing')
-          playing = false;
-      });
-  } else {
-      player.play(track, function(){
-          console.log('playing');
-          // res.send('playing')
-          playing = true;
-      });
-  }
-
-});
+// button2.watch(function (err, value) {
+//   if (err) {
+//     throw err;
+//   }
+//
+//   console.log('press2');
+//   // led.writeSync(value);
+//   if(playing){
+//       player.play(track, function(){
+//           console.log('playing');
+//           // res.send('playing')
+//           playing = false;
+//       });
+//   } else {
+//       player.play(track, function(){
+//           console.log('playing');
+//           // res.send('playing')
+//           playing = true;
+//       });
+//   }
+//
+// });
 
 process.on('SIGINT', function () {
   button.unexport();
