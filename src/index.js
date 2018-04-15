@@ -37,6 +37,7 @@ tracks.forEach(function(t){
 // check for new media poller
 var poller = setInterval(function(){
     fs.readdir(device, function(err, tracks){
+        console.log('read floppy:', tracks);
         if(tracks){
             tracks.forEach(function(t){
                 if(t != track_name && t.includes('.opus')){
