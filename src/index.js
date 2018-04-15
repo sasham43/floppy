@@ -19,7 +19,12 @@ var listenPort = process.env.PORT || 3000;
 
 // read track
 var device = '/media/pi/0';
-var tracks = fs.readdirSync(device);
+try {
+    var tracks = fs.readdirSync(device);
+} catch(e){
+    console.log('no media in here');
+    var tracks = [];
+}
 var track;
 var track_name;
 tracks.forEach(function(t){
@@ -40,7 +45,7 @@ var poller = setInterval(function(){
                     doAPlay();
                 }
             });
-        }        
+        }
     });
 }, 5000);
 
