@@ -33,7 +33,7 @@ tracks.forEach(function(t){
 var poller = setInterval(function(){
     fs.readdir(device, function(err, tracks){
         tracks.forEach(function(t){
-            if(t != track_name){
+            if(t != track_name && t.includes('.opus')){
                 track_name = t;
                 track = device + t;
                 doAPlay();
