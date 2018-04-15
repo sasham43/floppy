@@ -45,6 +45,8 @@ var poller = setInterval(function(){
                     doAPlay();
                 }
             });
+        } else {
+            console.log('no tracks');
         }
     });
 }, 5000);
@@ -56,9 +58,9 @@ function doAPlay(){
     });
 }
 
-player.cmd('longhelp', function(err, resp){
-    console.log('available commands', resp);
-});
+// player.cmd('longhelp', function(err, resp){
+//     console.log('available commands', resp);
+// });
 
 process.on('SIGINT', function(){
     player.destroy();
