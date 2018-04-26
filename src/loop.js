@@ -33,7 +33,7 @@ function checkFile(){
         if (last_cmd != evts[evts.length - 1]) {
             console.log('last cmd', last_cmd);
             // new cmd
-            if (last_cmd == 'add') {
+            if (evts[evts.length - 1] == 'add') {
                 console.log('mount');
                 let mount = cp.spawn('pmount', ['/dev/sda1']);
 
@@ -48,7 +48,7 @@ function checkFile(){
                 mount.on('close', (code) => {
                   console.log(`mount child process exited with code ${code}`);
                 });
-            } else if (last_cmd == 'remove') {
+            } else if (evts[evts.length - 1] == 'remove') {
                 console.log('umount');
                 let umount = cp.spawn('pumount', ['/dev/sda1']);
 
