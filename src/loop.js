@@ -13,7 +13,6 @@ setInterval(checkFile, 5000);
 // checkFile();
 
 function checkFile(){
-    console.log('running');
     fs.readFile(path.join(process.env.HOME, 'floppy-logs/log.txt'), 'utf-8', function(err, resp){
         if(err)
             console.log('err', err);
@@ -30,6 +29,7 @@ function checkFile(){
         });
 
         // last_cmd = evts[evts.length - 1];
+        console.log('running', evts[evts.length - 1], last_cmd);
         if (last_cmd != evts[evts.length - 1]) {
             console.log('last cmd', last_cmd);
             // new cmd
