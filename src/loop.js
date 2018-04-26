@@ -30,9 +30,10 @@ function checkFile(){
 
         // last_cmd = evts[evts.length - 1];
         if (last_cmd != evts[evts.length - 1]) {
-            console.log('mount');
+            console.log('last cmd', last_cmd);
             // new cmd
             if (last_cmd == 'add') {
+                console.log('mount');
                 let mount = cp.spawn('pmount', ['/dev/sda1']);
 
                 mount.stdout.on('data', (data) => {
