@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const cp = require('child-process');
+const cp = require('child_process');
 
 // remember to wipe the log file when this starts up
 
