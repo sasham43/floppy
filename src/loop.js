@@ -28,11 +28,37 @@ function checkFile(){
 
         // last_cmd = evts[evts.length - 1];
         if (last_cmd != evts[evts.length - 1]) {
+            console.log('mount');
             // new cmd
             if (last_cmd == 'add') {
-                cp.spawn('pmount', ['/dev/sda1']);
+                let mount = cp.spawn('pmount', ['/dev/sda1']);
+
+                mount.stdout.on('data', (data) => {
+                  console.log(`mount stdout: ${data}`);
+                });
+
+                mount.stderr.on('data', (data) => {
+                  console.log(`mount stderr: ${data}`);
+                });
+
+                mount.on('close', (code) => {
+                  console.log(`mount child process exited with code ${code}`);
+                });
             } else if (last_cmd == 'remove') {
-                cp.spawn('pumount', ['/dev/sda1']);
+                console.log('umount');
+                let umount = cp.spawn('pumount', ['/dev/sda1']);
+
+                umount.stdout.on('data', (data) => {
+                  console.log(`umount stdout: ${data}`);
+                });
+
+                umount.stderr.on('data', (data) => {
+                  console.log(`umount stderr: ${data}`);
+                });
+
+                umount.on('close', (code) => {
+                  console.log(`umount child process exited with code ${code}`);
+                });
             }
             last_cmd = evts[evts.length - 1];
         }
