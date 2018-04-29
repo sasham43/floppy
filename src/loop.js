@@ -16,7 +16,7 @@ var status = 'mounted';
 setInterval(checkFile, 5000);
 
 function checkFile(){
-    var fdisk = cp.spawn('sudo fdisk -l');
+    var fdisk = cp.spawn('fdisk -l');
 
     fdisk.on('data', (data)=>{
         console.log(`fdisk data: ${data}`);
