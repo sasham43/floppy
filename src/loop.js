@@ -29,7 +29,7 @@ function checkFile(){
             console.log(`err: ${err}`);
 
         console.log(`data: ${data}`);
-    }));
+    });
     // var fdisk = cp.spawn('fdisk -l');
     //
     // fdisk.on('data', (data)=>{
