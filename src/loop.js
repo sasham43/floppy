@@ -23,7 +23,7 @@ var mode = 'change';
 
 var last_cmd = '';
 var prev_evts = [];
-var status = '';
+var status = 'mounted';
 
 setInterval(checkFile, 5000);
 
