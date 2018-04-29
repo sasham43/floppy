@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const cp = require('child_process');
 const filesystem = require('fs-filesystem');
+const util = require('util');
 
 // var devices = filesystem(null, (err, data)=>{
 //     if(err)
@@ -28,10 +29,7 @@ function checkFile(){
         if(err)
             console.log(`err: ${err}`);
 
-        // console.log(`data: ${data}`);
-        for (key in data){
-            console.log(`${key}: ${data[key]}`);
-        }
+        console.log(`data:`, util.inspect(data, {depth:7}));
     });
     // var fdisk = cp.spawn('fdisk -l');
     //
