@@ -20,7 +20,7 @@ function checkFile(){
 
     fdisk.on('data', (data)=>{
         console.log(`fdisk data: ${data}`);
-        if(data.includes('/dev/sda1'){
+        if(data.includes('/dev/sda1')){
             console.log('disk inserted');
         } else {
             console.log('no disk inserted');
