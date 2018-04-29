@@ -28,7 +28,10 @@ function checkFile(){
         if(err)
             console.log(`err: ${err}`);
 
-        console.log(`data: ${data}`);
+        // console.log(`data: ${data}`);
+        for (keys in data){
+            console.log(`${key}: ${data[key]}`);
+        }
     });
     // var fdisk = cp.spawn('fdisk -l');
     //
