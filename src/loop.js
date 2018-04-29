@@ -87,7 +87,7 @@ function checkFile(){
         //     }
         // }
 
-        last_cmd = evts[evts.length - 1];
+        // last_cmd = evts[evts.length - 1];
         console.log('running', evts[evts.length - 1], last_cmd);
         if (last_cmd != evts[evts.length - 1]) {
             console.log('last cmd', last_cmd);
