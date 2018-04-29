@@ -29,7 +29,26 @@ function checkFile(){
         if(err)
             console.log(`err: ${err}`);
 
-        console.log(`data:`, util.inspect(data, {depth:7}));
+        // console.log(`data:`, util.inspect(data, {depth:7}));
+        if(data.devices.sda){
+            console.log('inserted');
+            var mount = cp.spawn('pmount /dev/sda1 pi');
+            mount.on('data' data=>{
+                console.log(`pmount: ${data}`);
+            });
+            mount.on('error', err=>{
+                console.log(`pmount err: ${err}`);
+            });
+        } else {
+            console.log('not inserted');
+            var umount = cp.spawn('pumount /dev/sda1');
+            umount.on('data' data=>{
+                console.log(`pumount: ${data}`);
+            });
+            umount.on('error', err=>{
+                console.log(`pumount err: ${err}`);
+            });
+        }
     });
     // var fdisk = cp.spawn('fdisk -l');
     //
