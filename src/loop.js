@@ -49,6 +49,7 @@ function checkFile(){
         });
 
         if(mode == 'change'){
+            console.log('lengths',new_evts.length, prev_evts.length );
             if(new_evts.length != prev_evts.length){
                 if(status == 'mounted'){
                     // unmount that shizz
@@ -94,7 +95,7 @@ function checkFile(){
             }
         } else if (mode == 'add/remove'){
             console.log('running', evts[evts.length - 1], last_cmd);
-            
+
             if (last_cmd != evts[evts.length - 1]) {
                 console.log('last cmd', last_cmd);
                 // new cmd
