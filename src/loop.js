@@ -18,9 +18,9 @@ const cp = require('child_process');
 
 // remember to wipe the log file when this starts up
 
-// var last_cmd = '';
-var prev_evts = [];
-var status = '';
+var last_cmd = '';
+// var prev_evts = [];
+// var status = '';
 
 setInterval(checkFile, 5000);
 
@@ -30,7 +30,8 @@ function checkFile(){
             console.log('err', err);
 
         var lines = resp.split('\n');
-        var new_evts = [];
+        // var new_evts = [];
+        var evts = [];
         lines.forEach(function(line){
             var split = line.split(' ');
             var type = split[1];
