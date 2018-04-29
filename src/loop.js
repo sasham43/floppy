@@ -29,7 +29,7 @@ function checkFile(){
             console.log(`err: ${err}`);
 
         // console.log(`data: ${data}`);
-        for (keys in data){
+        for (key in data){
             console.log(`${key}: ${data[key]}`);
         }
     });
