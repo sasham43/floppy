@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const cp = require('child_process');
-const filesysem = require('fs-filesystem');
+const filesystem = require('fs-filesystem');
 
 // var devices = filesystem(null, (err, data)=>{
 //     if(err)
