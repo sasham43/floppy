@@ -66,7 +66,7 @@ function checkFile(){
 }
 
 function playFile(){
-    readdir('/media/pi', {deep: true}, (err, data)=>{
+    fs.readdir('/media/pi', (err, data)=>{
         if(err)
             return console.log('erred out reading a directory, great', err);
 
