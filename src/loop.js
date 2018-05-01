@@ -26,6 +26,8 @@ var status = 'mounted';
 var playing = false;
 var current_track = '';
 
+playFile();
+
 setInterval(checkFile, 5000);
 
 function checkFile(){
