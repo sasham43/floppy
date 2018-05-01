@@ -5,6 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 const filesystem = require('fs-filesystem');
 const util = require('util');
+const readdir = require('readdir-enhanced');
 
 // var devices = filesystem(null, (err, data)=>{
 //     if(err)
@@ -21,6 +22,9 @@ var mode = 'change';
 var last_cmd = '';
 var prev_evts = [];
 var status = 'mounted';
+
+var playing = false;
+var current_track = '';
 
 setInterval(checkFile, 5000);
 
@@ -50,18 +54,20 @@ function checkFile(){
             });
         }
     });
-    // var fdisk = cp.spawn('fdisk -l');
-    //
-    // fdisk.on('data', (data)=>{
-    //     console.log(`fdisk data: ${data}`);
-    //     if(data.includes('/dev/sda1')){
-    //         console.log('disk inserted');
-    //     } else {
-    //         console.log('no disk inserted');
-    //     }
-    // });
-    //
-    // fdisk.on('error', (err)=>{
-    //     console.log(`fdisk error: ${err}`);
-    // });
+}
+
+function playFile(){
+    readdir('/media/pi', {deep: true}, (err, data)=>{
+        if(err)
+            return console.log('erred out reading a directory, great', err);
+
+        data.forEach(d=>{
+            console.log('what is in there', d);
+            if(d.includes('.opus')){
+                current_track = d;
+            }
+        });
+
+        // then play it, presumably
+    })
 }
