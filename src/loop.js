@@ -26,7 +26,7 @@ var status = 'mounted';
 var playing = false;
 var current_track = '';
 
-playFile();
+// playFile();
 
 setInterval(checkFile, 5000);
 
@@ -48,7 +48,7 @@ function checkFile(){
             mount.on('close', data=>{
                 console.log(`pmount closed: ${data}`)
                 if(data == 0){
-                    playFile();
+                    playFile('/media/pi');
                 }
             })
         } else {
@@ -67,13 +67,16 @@ function checkFile(){
     });
 }
 
-function playFile(){
-    fs.readdir('/media/pi', (err, data)=>{
+function playFile(dir){
+    fs.readdir(dir, (err, data)=>{
         if(err)
             return console.log('erred out reading a directory, great', err);
 
         data.forEach(d=>{
             console.log('what is in there', d);
+            if(d == '0'){
+                playFile(dir + '/0');
+            }
             if(d.includes('.opus')){
                 current_track = d;
             }
