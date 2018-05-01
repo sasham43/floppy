@@ -45,6 +45,9 @@ function checkFile(){
             });
             mount.on('close', data=>{
                 console.log(`pmount closed: ${data}`)
+                if(data == 0){
+                    playFile();
+                }
             })
         } else {
             console.log('not inserted');
