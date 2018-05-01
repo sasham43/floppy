@@ -6,7 +6,8 @@ const cp = require('child_process');
 const filesystem = require('fs-filesystem');
 const util = require('util');
 const readdir = require('readdir-enhanced');
-
+const Cvlc = require('cvlc');
+var player = new Cvlc();
 // var devices = filesystem(null, (err, data)=>{
 //     if(err)
 //         console.log(`err: ${err}`);
@@ -48,7 +49,7 @@ function checkFile(){
             mount.on('close', data=>{
                 console.log(`pmount closed: ${data}`)
                 if(data == 0){
-                    playFile('/media/pi');
+                    findFile('/media/pi');
                 }
             })
         } else {
@@ -67,7 +68,7 @@ function checkFile(){
     });
 }
 
-function playFile(dir){
+function findFile(dir){
     fs.readdir(dir, (err, data)=>{
         if(err)
             return console.log('erred out reading a directory, great', err);
@@ -75,13 +76,20 @@ function playFile(dir){
         data.forEach(d=>{
             console.log('what is in there', d);
             if(d == '0'){
-                playFile(dir + '/0');
+                findFile(dir + '/0');
             }
             if(d.includes('.opus')){
-                current_track = d;
+                current_track = `${dir}/${d}`;
+                player.play(current_track, function(){
+                    console.log('playing');
+                });
             }
         });
 
         // then play it, presumably
     })
 }
+
+process.on('SIGINT', function(){
+    player.destroy();
+});
