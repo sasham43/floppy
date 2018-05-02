@@ -57,6 +57,8 @@ function checkFile(){
                     if(data == 0){
                         status = 'mounted';
                         findFile('/media/pi');
+                    } else if (data == 8){
+                        status = 'mounting';
                     }
                 });
             }
