@@ -39,31 +39,42 @@ function checkFile(){
         // console.log(`data:`, util.inspect(data, {depth:7}));
         if(data.devices.sda){
             console.log('inserted');
-            var mount = cp.spawn('pmount',['/dev/sda1','pi']);
-            mount.stdout.on('data', data=>{
-                console.log(`pmount: ${data}`);
-            });
-            mount.stderr.on('data', err=>{
-                console.log(`pmount err: ${err}`);
-            });
-            mount.on('close', data=>{
-                console.log(`pmount closed: ${data}`)
-                if(data == 0){
-                    findFile('/media/pi');
-                }
-            })
+            if(status = 'unmounted'){
+                var mount = cp.spawn('pmount',['/dev/sda1','pi']);
+                mount.stdout.on('data', data=>{
+                    console.log(`pmount: ${data}`);
+                });
+                mount.stderr.on('data', err=>{
+                    console.log(`pmount err: ${err}`);
+                    if(err == 'Error: could not lock the mount directory. Another pmount is probably running for this mount point.'){
+                        status = 'mounting';
+                    }
+                });
+                mount.on('close', data=>{
+                    console.log(`pmount closed: ${data}`)
+                    if(data == 0){
+                        status = 'mounted';
+                        findFile('/media/pi');
+                    }
+                });
+            }
         } else {
             console.log('not inserted');
-            var umount = cp.spawn('pumount',['/dev/sda1']);
-            umount.stdout.on('data', data=>{
-                console.log(`pumount: ${data}`);
-            });
-            umount.stderr.on('data', err=>{
-                console.log(`pumount err: ${err}`);
-            });
-            umount.on('close', data=>{
-                console.log(`pumount closed: ${data}`)
-            })
+            if(status != 'unmounted'){
+                var umount = cp.spawn('pumount',['/dev/sda1']);
+                umount.stdout.on('data', data=>{
+                    console.log(`pumount: ${data}`);
+                });
+                umount.stderr.on('data', err=>{
+                    console.log(`pumount err: ${err}`);
+                });
+                umount.on('close', data=>{
+                    console.log(`pumount closed: ${data}`)
+                    if(data == 0){
+                        status = 'unmounted';
+                    }
+                });
+            }
         }
     });
 }
