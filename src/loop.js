@@ -38,7 +38,7 @@ function checkFile(){
 
         // console.log(`data:`, util.inspect(data, {depth:7}));
         if(data.devices.sda){
-            console.log('inserted');
+            console.log(`inserted, status:${status}`);
             if(status == 'unmounted'){
                 var mount = cp.spawn('pmount',['/dev/sda1','pi']);
                 mount.stdout.on('data', data=>{
@@ -61,7 +61,7 @@ function checkFile(){
                 });
             }
         } else {
-            console.log('not inserted');
+            console.log(`not inserted, status:${status}`);
             if(status != 'unmounted'){
                 var umount = cp.spawn('pumount',['/dev/sda1']);
                 umount.stdout.on('data', data=>{
