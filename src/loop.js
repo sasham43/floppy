@@ -26,6 +26,7 @@ var status = 'mounted';
 
 var playing = false;
 var current_track = '';
+var player_status_promise;
 
 // playFile();
 
@@ -102,6 +103,11 @@ function findFile(dir){
                 current_track = `${dir}/${d}`;
                 player.play(current_track, function(){
                     console.log('playing');
+                    player_status_promise = setInterval(function(){
+                        player.cmd('status', function(err, response){
+                            console.log(`err:${err}, response:${response}`);
+                        });
+                    })
                 });
             }
         });
