@@ -69,6 +69,9 @@ function checkFile(){
                 });
                 umount.stderr.on('data', err=>{
                     console.log(`pumount err: ${err}`);
+                    if(err == 'Error: device /dev/sda1 is not mounted'){
+                        status = 'unmounted';
+                    }
                 });
                 umount.on('close', data=>{
                     console.log(`pumount closed: ${data}`)
