@@ -39,7 +39,7 @@ function checkFile(){
         // console.log(`data:`, util.inspect(data, {depth:7}));
         if(data.devices.sda){
             console.log('inserted');
-            if(status = 'unmounted'){
+            if(status == 'unmounted'){
                 var mount = cp.spawn('pmount',['/dev/sda1','pi']);
                 mount.stdout.on('data', data=>{
                     console.log(`pmount: ${data}`);
@@ -48,6 +48,8 @@ function checkFile(){
                     console.log(`pmount err: ${err}`);
                     if(err == 'Error: could not lock the mount directory. Another pmount is probably running for this mount point.'){
                         status = 'mounting';
+                    } else if (err == 'Error: device /dev/sda1 is already mounted to /media/pi'){
+                        status = 'mounted';
                     }
                 });
                 mount.on('close', data=>{
