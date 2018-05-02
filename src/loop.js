@@ -77,6 +77,8 @@ function checkFile(){
                     console.log(`pumount closed: ${data}`)
                     if(data == 0){
                         status = 'unmounted';
+                    } else if (data == 4){
+                        status = 'unmounted';
                     }
                 });
             }
