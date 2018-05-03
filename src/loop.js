@@ -123,8 +123,8 @@ function findFile(dir){
                             if(player_status == 'stopped'){
                                 setInterval.cancel(player_status_promise)
                             }
-                        }, 1000);
-                    })
+                        });
+                    }, 1000)
                 });
             }
         });
