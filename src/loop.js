@@ -27,8 +27,11 @@ var status = 'mounted';
 var playing = false;
 var current_track = '';
 var player_status_promise;
+var player_status;
 
 // playFile();
+
+checkFile();
 
 setInterval(checkFile, 5000);
 
@@ -104,9 +107,23 @@ function findFile(dir){
                 player.play(current_track, function(){
                     console.log('playing');
                     player_status_promise = setInterval(function(){
-                        player.cmd('status', function(err, response){
-                            console.log(`err:${err}, response:${response}`);
-                        });
+                        player.cmd('status', function(err, resp){
+                            if(err)
+                                console.log(`err: ${err}`);
+
+                            console.log(`player:${response}`);
+                            var split = resp.split('\n');
+
+                            split.forEach(function(s){
+                                if(s.includes('state')){
+                                    var split = s.split(' ');
+                                    player_status = split[2];
+                                }
+                            });
+                            if(player_status == 'stopped'){
+                                setInterval.cancel(player_status_promise)
+                            }
+                        }, 1000);
                     })
                 });
             }
