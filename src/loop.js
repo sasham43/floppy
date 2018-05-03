@@ -111,7 +111,7 @@ function findFile(dir){
                             if(err)
                                 console.log(`err: ${err}`);
 
-                            console.log(`player:${response}`);
+                            console.log(`player:${resp}`);
                             var split = resp.split('\n');
 
                             split.forEach(function(s){
