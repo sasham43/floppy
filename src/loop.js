@@ -135,6 +135,6 @@ function findFile(dir){
 
 process.on('SIGINT', function(){
     player.destroy();
-    console.log('player', player);
+    // console.log('player', player);
     process.exit();
 });
