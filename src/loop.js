@@ -121,7 +121,25 @@ function findFile(dir){
                                 }
                             });
                             if(player_status == 'stopped'){
-                                setInterval.cancel(player_status_promise)
+                                clearInterval(player_status_promise)
+                                var umount = cp.spawn('pumount',['/dev/sda1']);
+                                umount.stdout.on('data', data=>{
+                                    console.log(`pumount: ${data}`);
+                                });
+                                umount.stderr.on('data', err=>{
+                                    console.log(`pumount err: ${err}`);
+                                    if(err == 'Error: device /dev/sda1 is not mounted'){
+                                        status = 'unmounted';
+                                    }
+                                });
+                                umount.on('close', data=>{
+                                    console.log(`pumount closed: ${data}`)
+                                    if(data == 0){
+                                        status = 'unmounted';
+                                    } else if (data == 4){
+                                        status = 'unmounted';
+                                    }
+                                });
                             }
                         });
                     }, 1000)
