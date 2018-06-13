@@ -1,3 +1,6 @@
+const Cvlc = require('cvlc');
+var player = new Cvlc();
+
 var song = '/media/pi/0/heatwave-small.opus'
 
 
