@@ -66,6 +66,9 @@ function checkFile(){
                         status = 'mounting';
                     }
                 });
+            } else {
+                status = 'mounted';
+                findFile('/media/pi');
             }
         } else {
             console.log(`not inserted, status:${status}`);
