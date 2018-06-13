@@ -33,7 +33,7 @@ var player_status;
 
 checkFile();
 
-setInterval(checkFile, 5000);
+setInterval(checkFile, 2000);
 
 function checkFile(){
     var devices = filesystem(null, (err, data)=>{
@@ -107,41 +107,7 @@ function findFile(dir){
                 player.play(current_track, function(){
                     console.log('playing');
                     player_status_promise = setInterval(function(){
-                        player.cmd('status', function(err, resp){
-                            if(err)
-                                console.log(`err: ${err}`);
-
-                            console.log(`player:${resp}`);
-                            var split = resp.split('\n');
-
-                            split.forEach(function(s){
-                                if(s.includes('state')){
-                                    var split = s.split(' ');
-                                    player_status = split[2];
-                                }
-                            });
-                            if(player_status == 'stopped'){
-                                clearInterval(player_status_promise)
-                                var umount = cp.spawn('pumount',['/dev/sda1']);
-                                umount.stdout.on('data', data=>{
-                                    console.log(`pumount: ${data}`);
-                                });
-                                umount.stderr.on('data', err=>{
-                                    console.log(`pumount err: ${err}`);
-                                    if(err == 'Error: device /dev/sda1 is not mounted'){
-                                        status = 'unmounted';
-                                    }
-                                });
-                                umount.on('close', data=>{
-                                    console.log(`pumount closed: ${data}`)
-                                    if(data == 0){
-                                        status = 'unmounted';
-                                    } else if (data == 4){
-                                        status = 'unmounted';
-                                    }
-                                });
-                            }
-                        });
+                        checkPlayerStatus(player_status_promise)
                     }, 1000)
                 });
             }
@@ -149,6 +115,44 @@ function findFile(dir){
 
         // then play it, presumably
     })
+}
+
+function checkPlayerStatus(player_status_promise){
+    player.cmd('status', function(err, resp){
+        if(err)
+            console.log(`err: ${err}`);
+
+        console.log(`player:${resp}`);
+        var split = resp.split('\n');
+
+        split.forEach(function(s){
+            if(s.includes('state')){
+                var split = s.split(' ');
+                player_status = split[2];
+            }
+        });
+        if(player_status == 'stopped'){
+            clearInterval(player_status_promise)
+            var umount = cp.spawn('pumount',['/dev/sda1']);
+            umount.stdout.on('data', data=>{
+                console.log(`pumount: ${data}`);
+            });
+            umount.stderr.on('data', err=>{
+                console.log(`pumount err: ${err}`);
+                if(err == 'Error: device /dev/sda1 is not mounted'){
+                    status = 'unmounted';
+                }
+            });
+            umount.on('close', data=>{
+                console.log(`pumount closed: ${data}`)
+                if(data == 0){
+                    status = 'unmounted';
+                } else if (data == 4){
+                    status = 'unmounted';
+                }
+            });
+        }
+    });
 }
 
 process.on('SIGINT', function(){
