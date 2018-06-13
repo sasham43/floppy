@@ -28,6 +28,7 @@ var playing = false;
 var current_track = '';
 var player_status_promise;
 var player_status;
+var song_files = [];
 
 // playFile();
 
@@ -104,20 +105,34 @@ function findFile(dir){
             }
             if(d.includes('.opus')){
                 current_track = `${dir}/${d}`;
-                player.play(current_track, function(){
-                    console.log('playing');
-                    player_status_promise = setInterval(function(){
-                        checkPlayerStatus(player_status_promise)
-                    }, 1000)
-                });
+                song_files.push(current_track);
+                // player.play(current_track, function(){
+                //     console.log('playing');
+                //     player_status_promise = setInterval(function(){
+                //         checkPlayerStatus(player_status_promise)
+                //     }, 1000)
+                // });
             }
         });
+
+        playSongs(song_files, 0);
 
         // then play it, presumably
     })
 }
 
-function checkPlayerStatus(player_status_promise){
+function playSongs(songs, index) {
+    player.play(songs[index], function(){
+        console.log(`playing track ${index}`);
+        player_status_promise = setInterval(function(){
+            var new_index = (index >= songs.length - 1) ? index + 1 : -1; // send a -1 if this is the last track, otherwise increment track
+
+            checkPlayerStatus(player_status_promise, songs, index)
+        }, 1000);
+    })
+}
+
+function checkPlayerStatus(player_status_promise, songs, index){
     player.cmd('status', function(err, resp){
         if(err)
             console.log(`err: ${err}`);
@@ -132,25 +147,29 @@ function checkPlayerStatus(player_status_promise){
             }
         });
         if(player_status == 'stopped'){
-            clearInterval(player_status_promise)
-            var umount = cp.spawn('pumount',['/dev/sda1']);
-            umount.stdout.on('data', data=>{
-                console.log(`pumount: ${data}`);
-            });
-            umount.stderr.on('data', err=>{
-                console.log(`pumount err: ${err}`);
-                if(err == 'Error: device /dev/sda1 is not mounted'){
-                    status = 'unmounted';
-                }
-            });
-            umount.on('close', data=>{
-                console.log(`pumount closed: ${data}`)
-                if(data == 0){
-                    status = 'unmounted';
-                } else if (data == 4){
-                    status = 'unmounted';
-                }
-            });
+            clearInterval(player_status_promise);
+            if(index == -1){
+                var umount = cp.spawn('pumount',['/dev/sda1']);
+                umount.stdout.on('data', data=>{
+                    console.log(`pumount: ${data}`);
+                });
+                umount.stderr.on('data', err=>{
+                    console.log(`pumount err: ${err}`);
+                    if(err == 'Error: device /dev/sda1 is not mounted'){
+                        status = 'unmounted';
+                    }
+                });
+                umount.on('close', data=>{
+                    console.log(`pumount closed: ${data}`)
+                    if(data == 0){
+                        status = 'unmounted';
+                    } else if (data == 4){
+                        status = 'unmounted';
+                    }
+                });
+            } else {
+                playSongs(songs, index);
+            }
         }
     });
 }
