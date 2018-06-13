@@ -125,7 +125,7 @@ function playSongs(songs, index) {
     //     }, 1000);
     // })
     player.cmd(`play ${songs[index]} --file-caching 10000`, function(){
-        console.log(`playing track ${index}`);
+        console.log(`playing track ${songs[index]} ${index}`);
         player_status_promise = setInterval(function(){
             var new_index = (index >= songs.length - 1) ? index + 1 : -1; // send a -1 if this is the last track, otherwise increment track
 
