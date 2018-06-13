@@ -106,12 +106,6 @@ function findFile(dir){
             if(d.includes('.opus')){
                 current_track = `${dir}/${d}`;
                 song_files.push(current_track);
-                // player.play(current_track, function(){
-                //     console.log('playing');
-                //     player_status_promise = setInterval(function(){
-                //         checkPlayerStatus(player_status_promise)
-                //     }, 1000)
-                // });
             }
         });
 
@@ -122,7 +116,15 @@ function findFile(dir){
 }
 
 function playSongs(songs, index) {
-    player.play(songs[index], function(){
+    // player.play(songs[index], function(){
+    //     console.log(`playing track ${index}`);
+    //     player_status_promise = setInterval(function(){
+    //         var new_index = (index >= songs.length - 1) ? index + 1 : -1; // send a -1 if this is the last track, otherwise increment track
+    //
+    //         checkPlayerStatus(player_status_promise, songs, new_index)
+    //     }, 1000);
+    // })
+    player.cmd(`play ${songs[index]} --file-caching 10000`, function(){
         console.log(`playing track ${index}`);
         player_status_promise = setInterval(function(){
             var new_index = (index >= songs.length - 1) ? index + 1 : -1; // send a -1 if this is the last track, otherwise increment track
